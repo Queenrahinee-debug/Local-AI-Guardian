@@ -1,0 +1,36 @@
+{
+  "description": "Sample OT communication events used to establish Guardian's v0.9 normal-behaviour baseline (context, temporal, and volume checks) and to derive the AI reconstruction-error threshold.",
+  "timestamp_unit": "seconds",
+  "message_size_unit": "bytes",
+  "devices": {
+    "PLC-01": { "level": 1, "ip": "10.0.1.10" },
+    "PLC-02": { "level": 1, "ip": "10.0.1.11" },
+    "SIS-01": { "level": 1, "ip": "10.0.1.12" },
+    "HMI-01": { "level": 2, "ip": "10.0.2.10" },
+    "SCADA-01": { "level": 3, "ip": "10.0.3.10" },
+    "HIST-01": { "level": 3.5, "ip": "10.0.35.10" }
+  },
+  "events": [
+    { "source": "HMI-01", "destination": "PLC-01", "information": "process_read", "protocol": "Modbus/TCP", "port": 502, "timestamp": 0, "bytes": 180 },
+    { "source": "HMI-01", "destination": "PLC-01", "information": "process_read", "protocol": "Modbus/TCP", "port": 502, "timestamp": 5, "bytes": 180 },
+    { "source": "HMI-01", "destination": "PLC-02", "information": "process_read", "protocol": "Modbus/TCP", "port": 502, "timestamp": 10, "bytes": 180 },
+    { "source": "PLC-01", "destination": "HMI-01", "information": "process_status", "protocol": "Modbus/TCP", "port": 502, "timestamp": 15, "bytes": 160 },
+    { "source": "PLC-01", "destination": "HMI-01", "information": "process_status", "protocol": "Modbus/TCP", "port": 502, "timestamp": 20, "bytes": 160 },
+    { "source": "PLC-02", "destination": "HMI-01", "information": "process_status", "protocol": "Modbus/TCP", "port": 502, "timestamp": 25, "bytes": 160 },
+    { "source": "PLC-01", "destination": "PLC-02", "information": "controller_state", "protocol": "Modbus/TCP", "port": 502, "timestamp": 30, "bytes": 140 },
+    { "source": "PLC-01", "destination": "PLC-02", "information": "controller_state", "protocol": "Modbus/TCP", "port": 502, "timestamp": 35, "bytes": 140 },
+    { "source": "PLC-02", "destination": "PLC-01", "information": "controller_state", "protocol": "Modbus/TCP", "port": 502, "timestamp": 40, "bytes": 140 },
+    { "source": "PLC-02", "destination": "PLC-01", "information": "controller_state", "protocol": "Modbus/TCP", "port": 502, "timestamp": 45, "bytes": 140 },
+    { "source": "SCADA-01", "destination": "PLC-01", "information": "supervisory_command", "protocol": "Modbus/TCP", "port": 502, "timestamp": 50, "bytes": 210 },
+    { "source": "PLC-01", "destination": "SCADA-01", "information": "process_status", "protocol": "Modbus/TCP", "port": 502, "timestamp": 55, "bytes": 190 },
+    { "source": "PLC-01", "destination": "HIST-01", "information": "process_data", "protocol": "OPC-UA", "port": 4840, "timestamp": 65, "bytes": 820 },
+    { "source": "PLC-01", "destination": "HIST-01", "information": "process_data", "protocol": "OPC-UA", "port": 4840, "timestamp": 75, "bytes": 820 },
+    { "source": "PLC-01", "destination": "HIST-01", "information": "process_data", "protocol": "OPC-UA", "port": 4840, "timestamp": 85, "bytes": 820 },
+    { "source": "PLC-01", "destination": "HIST-01", "information": "process_data", "protocol": "OPC-UA", "port": 4840, "timestamp": 95, "bytes": 820 },
+    { "source": "PLC-02", "destination": "HIST-01", "information": "process_data", "protocol": "OPC-UA", "port": 4840, "timestamp": 105, "bytes": 820 },
+    { "source": "PLC-02", "destination": "HIST-01", "information": "process_data", "protocol": "OPC-UA", "port": 4840, "timestamp": 115, "bytes": 820 },
+    { "source": "PLC-02", "destination": "HIST-01", "information": "process_data", "protocol": "OPC-UA", "port": 4840, "timestamp": 125, "bytes": 820 },
+    { "source": "SIS-01", "destination": "SCADA-01", "information": "safety_status", "protocol": "Modbus/TCP", "port": 502, "timestamp": 135, "bytes": 120 },
+    { "source": "SIS-01", "destination": "SCADA-01", "information": "safety_status", "protocol": "Modbus/TCP", "port": 502, "timestamp": 140, "bytes": 120 }
+  ]
+}
