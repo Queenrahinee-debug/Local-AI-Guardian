@@ -1,4 +1,4 @@
-# Local AI Guardian — Debangshu
+# Local AI Guardian — 
 
 ### Local AI-based behavioural security monitoring for OT/ICS environments
 
@@ -183,7 +183,6 @@ Local-AI-Guardian/
 ├── docs/                                   # Project documentation
 │   └── development_transparency.md         # Development and transparency notes
 ├── assets/                                 # Images and visual assets
-│   └── screenshots/
 │       ├── guardian-output-normal.png
 │       ├── guardian-output-suspicious.png
 │       ├── onnx-export-validation.png
@@ -206,7 +205,7 @@ Local-AI-Guardian/
 |`tests/test_guardian.py`|Automated regression tests|
 |`notebooks/`|Development and deployment validation|
 |`docs/`|Additional project documentation|
-|`assets/screenshots/`|Screenshots referenced in this README|
+|`assets/`|Screenshots referenced in this README|
 |`README.md`|Main project documentation|
 
 ---
@@ -334,7 +333,7 @@ flowchart TD
 
 ### Example result
 
-![Guardian output for a known-normal HMI-01 → PLC-01 event, showing a NORMAL verdict](assets/screenshots/guardian-output-normal.png)
+![Guardian output for a known-normal HMI-01 → PLC-01 event, showing a NORMAL verdict](assets/guardian-output-normal.png)
 
 Screenshot should show:
 
@@ -398,7 +397,7 @@ The project was tested using the actual deployed ONNX model and the runtime sour
 
 ## Runtime validation
 
-![Guardian runtime output for a known-normal HMI-01 → PLC-01 event](assets/screenshots/guardian-output-normal.png)
+![Guardian runtime output for a known-normal HMI-01 → PLC-01 event](assets/guardian-output-normal.png)
 
 This screenshot shows the actual Guardian runtime running with `guardian_autoencoder.onnx` against a known-normal HMI-01 → PLC-01 communication.
 
@@ -414,11 +413,11 @@ The contextual, temporal and volume checks also reported no anomaly.
 
 Guardian also correctly flags a reverse-direction HIST-01 → PLC-01 event as `SUSPICIOUS`, catching both the AI check and the context check firing together:
 
-![Guardian runtime output for a reverse-direction HIST-01 → PLC-01 event, flagged as SUSPICIOUS](assets/screenshots/guardian-output-suspicious.png)
+![Guardian runtime output for a reverse-direction HIST-01 → PLC-01 event, flagged as SUSPICIOUS](assets/guardian-output-suspicious.png)
 
 ## ONNX / deployment validation
 
-![ONNX export re-verified against PyTorch and against the currently-shipped model, from the deployment notebook](assets/screenshots/onnx-export-validation.png)
+![ONNX export re-verified against PyTorch and against the currently-shipped model, from the deployment notebook](assets/onnx-export-validation.png)
 
 This is the deployment notebook's ONNX export step: the freshly-exported model matches the PyTorch reference to 1.19e-07 across all baseline events, and is byte-identical to the model already shipped in `models/guardian_autoencoder.onnx`.
 
@@ -426,7 +425,7 @@ The purpose is to demonstrate that the exported ONNX model can be loaded and use
 
 ## Snapdragon validation
 
-![Qualcomm AI Hub inference result compared against the PyTorch reference on a Snapdragon X Elite CRD target](assets/screenshots/snapdragon-parity-validation.png)
+![Qualcomm AI Hub inference result compared against the PyTorch reference on a Snapdragon X Elite CRD target](assets/snapdragon-parity-validation.png)
 
 This is the deployment notebook's parity check: a real Guardian event was run through Qualcomm AI Hub on a Snapdragon X Elite CRD target and compared against the PyTorch reference. The two platforms agree on the same `NORMAL`/`SUSPICIOUS` verdict, with only a small floating-point difference (0.0036 max per-element) between the on-device and reference output.
 
