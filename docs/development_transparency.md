@@ -18,7 +18,7 @@ The tools below are grouped by the role they played, rather than listed as a sin
 
 | Tool | Role |
 | ---- | ---- |
-| **ChatGPT** | Architecture discussion, engineering reasoning, debugging, code review, documentation, and deployment planning |
+| **Claude** | Architecture discussion, engineering reasoning, debugging, code review, documentation, and deployment planning |
 
 ### 2.2 Model development
 
@@ -87,7 +87,7 @@ This separation — learned model on one side, human-auditable investigation log
 
 # 4. AI Assistance Disclosure
 
-**ChatGPT** was used as an engineering assistant throughout development. Specifically, it supported:
+**Claude** was used as an engineering assistant throughout development. Specifically, it supported:
 
 1. Architecture discussions — reasoning through design options for Guardian's detection pipeline.
 2. Debugging — narrowing down the cause of unexpected runtime or model behaviour.

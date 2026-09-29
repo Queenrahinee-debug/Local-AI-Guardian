@@ -1,6 +1,4 @@
-# Local AI Guardian
-
-
+# Local AI Guardian — Debangshu
 
 ### Local AI-based behavioural security monitoring for OT/ICS environments
 
@@ -8,23 +6,23 @@ Local AI Guardian is a local-first OT/ICS security monitoring system designed to
 
 The main idea is simple:
 
-> \*\*Observe. Analyze. Explain. Alert — without interfering with the industrial process.\*\*
+> **Observe. Analyze. Explain. Alert — without interfering with the industrial process.**
 
-\---
+---
 
-# 1\. The Problem
+# 1. The Problem
 
 In OT/ICS environments, Internet connectivity is often limited, with external connectivity typically concentrated around higher Purdue levels such as the DMZ/Level 3.5. This makes security practices that depend on continuous Internet connectivity, such as cloud-based monitoring, updates, patching and some antivirus workflows, more difficult to apply directly to industrial systems.
 
 This creates a practical question:
 
-> \*\*How can we continuously monitor OT/ICS communication for suspicious behavioural changes while keeping the monitoring local and without interfering with the industrial process?\*\*
+> **How can we continuously monitor OT/ICS communication for suspicious behavioural changes while keeping the monitoring local and without interfering with the industrial process?**
 
 This question led to the development of Local AI Guardian — a local, passive behavioural security monitor designed to observe OT/ICS communication, detect deviations from expected behaviour, and alert a human operator without automatically blocking traffic or modifying the industrial process.
 
-\---
+---
 
-# 2\. What Guardian Does
+# 2. What Guardian Does
 
 Local AI Guardian works as a **passive observer** of communication behaviour in an OT/ICS environment.
 
@@ -62,11 +60,11 @@ The results of these checks are combined before Guardian produces its final asse
 
 ```mermaid
 flowchart TD
-    A\[Industrial communication] --> B\[Guardian]
-    B --> C\[Does this look normal?]
-    C --> D\[Normal]
-    C --> E\[Suspicious]
-    E --> F\[Human investigation]
+    A[Industrial communication] --> B[Guardian]
+    B --> C[Does this look normal?]
+    C --> D[Normal]
+    C --> E[Suspicious]
+    E --> F[Human investigation]
 
     classDef gray fill:#F1EFE8,stroke:#5F5E5A,color:#444441
     classDef blue fill:#E6F1FB,stroke:#185FA5,color:#0C447C
@@ -83,27 +81,27 @@ flowchart TD
 
 Guardian is therefore intended to be a **security assistant**, not an automatic controller of the industrial environment.
 
-\---
+---
 
-# 3\. Architecture
+# 3. Architecture
 
 Guardian sits alongside the OT/ICS environment as a passive observer. It never sits inline in the communication path, and it never blocks or changes traffic — it only watches, reasons, and reports. The diagram below lays out the full pipeline, from the industrial devices on the left through to the human operator who reviews anything Guardian flags.
 
 ```mermaid
 flowchart TD
-    A\["OT/ICS Environment<br/>PLCs, HMI, SCADA, Historian"] --> B\["OT Communication Events"]
+    A["OT/ICS Environment<br/>PLCs, HMI, SCADA, Historian"] --> B["OT Communication Events"]
     B --> D
 
-    subgraph GUARDIAN\["Guardian — monitoring \&amp; notification only"]
+    subgraph GUARDIAN["Guardian — monitoring &amp; notification only"]
         direction TB
-        D\["AI Behavioural Check<br/>18-feature vector → ONNX autoencoder → reconstruction error"] --> F\["Decision Fusion"]
-        E\["Behaviour Investigation<br/>Context, direction, timing, volume"] --> F
+        D["AI Behavioural Check<br/>18-feature vector → ONNX autoencoder → reconstruction error"] --> F["Decision Fusion"]
+        E["Behaviour Investigation<br/>Context, direction, timing, volume"] --> F
     end
 
-    F --> G\["Normal"]
-    F --> H\["Suspicious"]
-    H --> I\["Human Investigation"]
-    GUARDIAN -.-> J\["Future direction:<br/>Zero Trust OT Architecture"]
+    F --> G["Normal"]
+    F --> H["Suspicious"]
+    H --> I["Human Investigation"]
+    GUARDIAN -.-> J["Future direction:<br/>Zero Trust OT Architecture"]
 
     classDef gray fill:#F1EFE8,stroke:#5F5E5A,color:#444441
     classDef teal fill:#E1F5EE,stroke:#0F6E56,color:#085041
@@ -126,9 +124,9 @@ flowchart TD
 
 Guardian never blocks traffic, controls a PLC, or changes the industrial process — see **§ 11 Safety Boundary** for the full list of what Guardian can and cannot do.
 
-\---
+---
 
-# 4\. How Guardian Detects Suspicious Behaviour
+# 4. How Guardian Detects Suspicious Behaviour
 
 Guardian does not depend on only one signal. The current system combines several checks.
 
@@ -163,52 +161,63 @@ Guardian checks whether the communication volume is within the expected range.
 
 These signals are combined into the final Guardian assessment. This is important because an unusual AI score by itself does not automatically mean that an attack has happened. The purpose of the combined checks is to provide more useful evidence for human investigation.
 
-\---
+---
 
-# 5\. Repository Structure
+# 5. Repository Structure
 
-1. `Local-AI-Guardian/`
+```text
+Local-AI-Guardian/
 
-   1. `README.md`
-   2. `LICENSE`
-   3. `requirements.txt`
-   4. `.gitignore`
-   5. `src/`
-
-      1. `guardian.py`
-   6. `models/`
-
-      1. `guardian\_autoencoder.onnx`
-   7. `notebooks/`
-
-      1. `OT\_Guardian\_PyTorch\_Deployment.ipynb`
-   8. `data/`
-
-      1. `sample\_events.json`
-   9. `docs/`
-
-      1. `development\_transparency.md`
+├── src/                                    # Source code for the application
+│   └── guardian.py                         # Runtime Guardian logic
+├── models/                                 # Machine learning models and weights
+│   ├── guardian_autoencoder.onnx           # Deployed autoencoder (dynamic batch)
+│   ├── guardian_autoencoder_static.onnx    # Deployed autoencoder (fixed batch, for on-device compilation)
+│   └── guardian_weights.json               # Trained weights (source of truth for both exports)
+├── data/                                   # Datasets and sample events
+│   └── sample_events.json                  # Sample OT communication events
+├── tests/                                  # Automated tests
+│   └── test_guardian.py                    # Automated regression tests
+├── notebooks/                              # Jupyter notebooks for development and validation
+│   └── Local_AI_Guardian_Deployment_v0.2.ipynb
+├── docs/                                   # Project documentation
+│   └── development_transparency.md         # Development and transparency notes
+├── assets/                                 # Images and visual assets
+│   └── screenshots/
+│       ├── guardian-output-normal.png
+│       ├── guardian-output-suspicious.png
+│       ├── onnx-export-validation.png
+│       └── snapdragon-parity-validation.png
+├── .gitignore                              # Files and folders for Git to ignore
+├── LICENSE                                 # Project license terms
+├── requirements.txt                        # Python runtime package dependencies
+└── README.md                               # Main project documentation
+```
 
 ### Main components
 
 |Component|Purpose|
 |-|-|
 |`src/guardian.py`|Runtime Guardian logic|
-|`models/guardian\_autoencoder.onnx`|Deployed autoencoder|
-|`notebooks/`|Development and deployment validation|
+|`models/guardian_autoencoder.onnx`|Deployed autoencoder (dynamic batch)|
+|`models/guardian_autoencoder_static.onnx`|Deployed autoencoder (fixed batch, for on-device compilation)|
+|`models/guardian_weights.json`|Trained weights (source of truth for both exports)|
 |`data/`|Sample OT communication events|
+|`tests/test_guardian.py`|Automated regression tests|
+|`notebooks/`|Development and deployment validation|
 |`docs/`|Additional project documentation|
+|`assets/screenshots/`|Screenshots referenced in this README|
 |`README.md`|Main project documentation|
 
-\---
+---
 
-# 6\. Model Information
+# 6. Model Information
 
 The AI component of Guardian is a lightweight autoencoder used for behavioural anomaly detection. The model was developed using PyTorch and exported to ONNX for deployment.
 
 The deployed model is:
 
-`models/guardian\_autoencoder.onnx`
+`models/guardian_autoencoder.onnx`
 
 ### Input
 
@@ -237,9 +246,9 @@ This threshold is part of the validated runtime behaviour and is not recalculate
 
 ```mermaid
 flowchart TD
-    A\[PyTorch] --> B\[ONNX]
-    B --> C\[ONNX Runtime]
-    C --> D\[Guardian]
+    A[PyTorch] --> B[ONNX]
+    B --> C[ONNX Runtime]
+    C --> D[Guardian]
 
     classDef gray fill:#F1EFE8,stroke:#5F5E5A,color:#444441
     classDef blue fill:#E6F1FB,stroke:#185FA5,color:#0C447C
@@ -250,9 +259,9 @@ flowchart TD
 
 The runtime therefore uses the deployed ONNX model instead of requiring the original training environment.
 
-\---
+---
 
-# 7\. Runtime Requirements
+# 7. Runtime Requirements
 
 The current runtime requires Python and the following main runtime packages:
 
@@ -261,20 +270,20 @@ The current runtime requires Python and the following main runtime packages:
 
 The project keeps the final runtime separate from the model-development environment. Training and deployment experiments do not need to be repeated when running the deployed Guardian model.
 
-\---
+---
 
-# 8\. Installation
+# 8. Installation
 
 1. Clone the repository and move into the project folder (repository URL: `<repository-url>`, folder name: `Local-AI-Guardian`).
 2. Install the required packages listed in `requirements.txt`.
-3. Confirm the ONNX model is present at `models/guardian\_autoencoder.onnx`.
+3. Confirm the ONNX model is present at `models/guardian_autoencoder.onnx`.
 4. Keep the repository structure unchanged so Guardian can locate the model correctly.
 
-\---
+---
 
-# 9\. Running Guardian
+# 9. Running Guardian
 
-Guardian exposes its analysis capability through a single entry point, `analyze\_event`, described here as a step-by-step algorithm rather than as pasted code:
+Guardian exposes its analysis capability through a single entry point, `analyze_event`, described here as a step-by-step algorithm rather than as pasted code:
 
 1. Import Guardian's analysis function from the runtime module.
 2. Build a communication event describing: source device, destination device, operation/information type, protocol, port, timestamp, and message size.
@@ -287,14 +296,14 @@ Guardian exposes its analysis capability through a single entry point, `analyze\
 
 ```mermaid
 flowchart TD
-    A\[Event] --> B\[Feature Encoding]
-    B --> C\[ONNX Inference]
-    C --> D\[Reconstruction Error]
-    D --> E\[Context Investigation]
-    E --> F\[Temporal Investigation]
-    F --> G\[Volume Investigation]
-    G --> H\[Decision Fusion]
-    H --> I\[Guardian Result]
+    A[Event] --> B[Feature Encoding]
+    B --> C[ONNX Inference]
+    C --> D[Reconstruction Error]
+    D --> E[Context Investigation]
+    E --> F[Temporal Investigation]
+    F --> G[Volume Investigation]
+    G --> H[Decision Fusion]
+    H --> I[Guardian Result]
 
     classDef gray fill:#F1EFE8,stroke:#5F5E5A,color:#444441
     classDef teal fill:#E1F5EE,stroke:#0F6E56,color:#085041
@@ -309,15 +318,15 @@ flowchart TD
     class I blue
 ```
 
-\---
+---
 
-# 10\. Example Input / Output
+# 10. Example Input / Output
 
 ### Example event
 
 1. Source: `HMI-01`
 2. Destination: `PLC-01`
-3. Operation: `process\_read`
+3. Operation: `process_read`
 4. Protocol: `Modbus/TCP`
 5. Port: `502`
 6. Timestamp: `145 seconds`
@@ -325,7 +334,7 @@ flowchart TD
 
 ### Example result
 
-**\[INSERT SCREENSHOT OF ACTUAL GUARDIAN OUTPUT HERE]**
+![Guardian output for a known-normal HMI-01 → PLC-01 event, showing a NORMAL verdict](assets/screenshots/guardian-output-normal.png)
 
 Screenshot should show:
 
@@ -341,9 +350,9 @@ Screenshot should show:
 
 There is no need to capture the entire terminal output if the important information can be shown clearly in one screenshot.
 
-\---
+---
 
-# 11\. Safety Boundary
+# 11. Safety Boundary
 
 Local AI Guardian is intentionally designed as a **monitoring and notification system**.
 
@@ -381,23 +390,17 @@ Local AI Guardian is intentionally designed as a **monitoring and notification s
 
 This boundary is intentional. The security system should not become another source of operational risk.
 
-\---
+---
 
-# 12\. Validation \& Deployment Evidence
+# 12. Validation & Deployment Evidence
 
 The project was tested using the actual deployed ONNX model and the runtime source used by Guardian.
 
 ## Runtime validation
 
-**\[INSERT SCREENSHOT HERE]**
+![Guardian runtime output for a known-normal HMI-01 → PLC-01 event](assets/screenshots/guardian-output-normal.png)
 
-This screenshot should show:
-
-1. The actual Guardian runtime successfully running with `guardian\_autoencoder.onnx`
-2. A known-normal HMI-01 → PLC-01 communication
-3. Reconstruction error
-4. Guardian threshold
-5. Final `NORMAL` result
+This screenshot shows the actual Guardian runtime running with `guardian_autoencoder.onnx` against a known-normal HMI-01 → PLC-01 communication.
 
 The validated example produced:
 
@@ -409,35 +412,39 @@ The validated example produced:
 
 The contextual, temporal and volume checks also reported no anomaly.
 
+Guardian also correctly flags a reverse-direction HIST-01 → PLC-01 event as `SUSPICIOUS`, catching both the AI check and the context check firing together:
+
+![Guardian runtime output for a reverse-direction HIST-01 → PLC-01 event, flagged as SUSPICIOUS](assets/screenshots/guardian-output-suspicious.png)
+
 ## ONNX / deployment validation
 
-**\[INSERT SCREENSHOT HERE]**
+![ONNX export re-verified against PyTorch and against the currently-shipped model, from the deployment notebook](assets/screenshots/onnx-export-validation.png)
 
-1. This screenshot should show the important ONNX validation result from the deployment notebook, rather than a screenshot of the entire notebook.
+This is the deployment notebook's ONNX export step: the freshly-exported model matches the PyTorch reference to 1.19e-07 across all baseline events, and is byte-identical to the model already shipped in `models/guardian_autoencoder.onnx`.
 
-The purpose is to demonstrate that the exported ONNX model can be loaded and used for inference successfully.
+The purpose is to demonstrate that the exported ONNX model can be loaded and used for inference successfully, and that it is provably the same model already in the repository.
 
 ## Snapdragon validation
 
-**\[INSERT SCREENSHOT HERE]**
+![Qualcomm AI Hub inference result compared against the PyTorch reference on a Snapdragon X Elite CRD target](assets/screenshots/snapdragon-parity-validation.png)
 
-1. This screenshot should show the important Qualcomm AI Hub / Snapdragon validation result, such as the target model execution, profiling or inference result.
+This is the deployment notebook's parity check: a real Guardian event was run through Qualcomm AI Hub on a Snapdragon X Elite CRD target and compared against the PyTorch reference. The two platforms agree on the same `NORMAL`/`SUSPICIOUS` verdict, with only a small floating-point difference (0.0036 max per-element) between the on-device and reference output.
 
-Only the useful evidence needs to be shown. The entire notebook does not need to be captured.
+Only the useful evidence is shown here; the entire notebook does not need to be captured.
 
-\---
+---
 
-# 13\. Snapdragon Deployment
+# 13. Snapdragon Deployment
 
 The deployment workflow was also tested against a Snapdragon X Elite target through Qualcomm AI Hub.
 
 ```mermaid
 flowchart TD
-    A\["Guardian ONNX Model"] --> B\["Qualcomm AI Hub"]
-    B --> C\["Snapdragon X Elite Target"]
-    C --> D\["Compile"]
-    D --> E\["Profile / Inference"]
-    E --> F\["Validate Output"]
+    A["Guardian ONNX Model"] --> B["Qualcomm AI Hub"]
+    B --> C["Snapdragon X Elite Target"]
+    C --> D["Compile"]
+    D --> E["Profile / Inference"]
+    E --> F["Validate Output"]
 
     classDef gray fill:#F1EFE8,stroke:#5F5E5A,color:#444441
     classDef blue fill:#E6F1FB,stroke:#185FA5,color:#0C447C
@@ -454,9 +461,9 @@ The project should be described as **Snapdragon-targeted and deployment-validate
 
 The normal Guardian runtime does not require continuous Internet access. Qualcomm AI Hub is part of the development and deployment validation workflow.
 
-\---
+---
 
-# 14\. Current Limitations
+# 14. Current Limitations
 
 Local AI Guardian is currently a prototype. The current system was developed and tested using a controlled OT/ICS environment rather than a live industrial plant. Therefore, the current model should not be treated as a model that already understands every industrial environment.
 
@@ -474,9 +481,9 @@ Current limitations include:
 
 A real industrial deployment would require plant-specific validation and a much larger range of normal and abnormal behaviour.
 
-\---
+---
 
-# 15\. Future Scope
+# 15. Future Scope
 
 The current Guardian is the first stage of a larger idea. Possible future development includes:
 
@@ -491,7 +498,7 @@ The long-term idea is to move from a network-location model of trust to a fully 
 
 ```mermaid
 flowchart LR
-    A\["Is this device inside<br/>the trusted network?"] --> B\["Is this communication expected —<br/>for this device, this direction,<br/>this operation, this time,<br/>and this context?"]
+    A["Is this device inside<br/>the trusted network?"] --> B["Is this communication expected —<br/>for this device, this direction,<br/>this operation, this time,<br/>and this context?"]
 
     classDef gray fill:#F1EFE8,stroke:#5F5E5A,color:#444441
     classDef purple fill:#EEEDFE,stroke:#534AB7,color:#3C3489
@@ -502,23 +509,23 @@ flowchart LR
 
 The current project does not implement this complete Zero Trust model. It provides an initial behavioural-monitoring layer that could contribute to such a system.
 
-\---
+---
 
-# 16\. Development Transparency
+# 16. Development Transparency
 
 The development process and the tools used to build the project are documented separately. See:
 
-`docs/development\_transparency.md`
+`docs/development_transparency.md`
 
 This document explains which platforms and tools were used, what each was used for, and where AI-assisted development was involved. The purpose is to keep the development process transparent without making the main README unnecessarily long.
 
-\---
+---
 
-# 17\. License
+# 17. License
 
 This project is released under the license included in this repository. See `LICENSE` for the applicable terms.
 
-\---
+---
 
 # Project Status
 

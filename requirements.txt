@@ -1,0 +1,17 @@
+# Local AI Guardian - runtime dependencies
+# Install with:  pip install -r requirements.txt
+#
+# Lower bounds are the versions this project was verified with;
+# upper bounds stop a future major release from silently breaking the install.
+# Requires Python 3.11 or newer (numpy 2.4+ drops older versions).
+
+numpy>=2.4,<3
+onnxruntime>=1.24,<2
+
+# --- Optional: only needed to run the automated tests (tests/test_guardian.py) ---
+# pytest>=9,<10
+
+# --- Optional: only needed for the deployment notebook (Colab installs these itself) ---
+# torch
+# onnx
+# qai-hub
