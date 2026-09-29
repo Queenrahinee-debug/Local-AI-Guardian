@@ -1,4 +1,4 @@
-# Local AI Guardian — 
+# Local AI Guardian 
 
 ### Local AI-based behavioural security monitoring for OT/ICS environments
 
@@ -335,7 +335,7 @@ flowchart TD
 
 ![Guardian output for a known-normal HMI-01 → PLC-01 event, showing a NORMAL verdict](assets/guardian-output-normal.png)
 
-Screenshot should show:
+Screenshot shows:
 
 1. Guardian result: `NORMAL`
 2. Reconstruction error
@@ -346,8 +346,6 @@ Screenshot should show:
 7. Volume anomaly status
 8. Communication context
 9. Human recommendation
-
-There is no need to capture the entire terminal output if the important information can be shown clearly in one screenshot.
 
 ---
 
